@@ -41,7 +41,7 @@ Flex columns with text elements transitioning in from top and bottom when panel 
 
 # 06 - TypeAhead
 
-AJAX fetch promise to a JSON list of cities with a search typeahead
+AJAX fetch promise to a JSON list of cities with a search type-ahead
 
 `const cities = fetch(endpoint).then(blob => blob.json()).then(data => console.log(data))` `const searchInput = document.querySelector('.search'); function findMatches(wordToMatch, cities) {return cities.filter(place => { const regex = new REgExp(wordtoMatch, 'gi'); return place.city.match(regex) || place.state.match(regex)})}; function displayMatches() { const matchArray = findMatches(this.value, cities)} searchInput.addEventListener('keyup', displayMatches)`
 
@@ -90,7 +90,7 @@ adding controls to a HTML5 video player
 
 #12 - Key Sequence Detector
 
-Detect a keycode on top of a website
+Detect a key-code on top of a website
 
 `window.addEventListener('keyup', e => { pressed.push(e.key); pressed.splice(-secretCode.length -1, pressed.length - secretCode.length); pressed.join('').includes('bazco') ? console.log('Got it!') : ''; })`
 
@@ -101,4 +101,16 @@ Get images to slide in when a user scrolls; can use this for loading resources w
 `function debounce(func, wait = 20, immediate = true) {...}` `const sliderImages = document.querySelectorAll('.slide-in')` `function checkSlide(e) { sliderImages.forEach(sliderImage => { const slideInAt = (window.scrollY + window.innerHeight) - sliderImage.height / 2; const imageBottom = sliderImage.offsetTop + sliderImage.height; const isHalfShown = slideInAt > sliderImage.offsetTop; const isNotScrolledPast = window.scrollY < imageBottom; (isHalfShown && isNotScrolledPast) ? sliderImage.classList.add('active') : sliderImage.classList.remove('active')})}` `window.addEventListener('scroll', debounce(checkSlide))`
 
 #14 - Reference vs Copy
+
+Be  careful to copy and not reference a object or array when you want to make a change to it; need a deep copy for properties >1 depth on an object
+
+`let name = 'baz'; let name2 = name; console.log(name, name2); name = 'shehbaz'; console.log(name, name2);` `const players = ['Wes', 'Sarah', 'Ryan', 'Poppy']; const team = players; console.log(players, team); team[3] = 'Lux'; console.log(players, team); const team2 = players.slice(); const team3 = [].concat(players); const team4 = [...players]; const team5 = Array.from(players);` `const person = { name: 'Wes Bos', age: 80 }; const cap = person; cap.age = 81; const cap2 = Object.assign({}, person, { number: 99, age: 78 }); console.log(person); console.log(cap); console.log(cap2); const cap3 = {...person}; console.log(cap3);` `const baz = { name: 'shehbaz', age: 28, social: { linkedin: 'shehbaz-sherwani', github: 'baz-co' }}; console.log(baz); const sheh = {...baz}; console.log(sheh); const sheh2 = Object.assign({}, baz); console.log(sheh2); sheh.social.github = 'wes-bos'; console.log(baz); console.log(sheh); console.log(sheh2); const sheh3 = JSON.parse(JSON.stringify(baz));`
+
+#15 - LocalStorage
+
+Essentially a ToDo list that writes to local storage with prettier CSS icons
+
+`let items = JSON.parse(localStorage.getItem('items'))||[]` `function addItem(e) { e.preventDefault(); const text = (this.querySelector('[name=item]')).value; const item = { text, done: false }; items.push(item); populateList(items, itemsList); localStorage.setItem('items', JSON.stringify(items)); this.reset();}` `function populateList(plates = [], platesList) { platesList.innerHTML = plates.map((plate, i) => '<li><input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''} /><label for="item${i}"> ${plate.text}</label></li>' ).join('')}`
+
+#16 - Mouse Move Shadow
 
