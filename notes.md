@@ -114,3 +114,27 @@ Essentially a ToDo list that writes to local storage with prettier CSS icons
 
 #16 - Mouse Move Shadow
 
+Text shadows relative to where your cursor is in a div
+
+`const walk = 100` `function shadow(e) { const { offsetWidth: width, offsetHeight: height } = hero; let { offsetX: x, offsetY: y} = e; if(this !== e.target) { x += e.target.offsetLeft; y = y + e.target.offsetTop }; const xWalk = Math.round((x / width * walk) - (walk / 2)); const yWalk = Math.round((y / height * walk) - (walk / 2)); text.style.textShadow = '${xWalk}px ${yWalk}px 0px rgba(255, 0, 255, .7)' };` `hero.addEventListener('mousemove', shadow)`
+
+#17 - Sort Without Articles
+
+Sort a list of bands ignoring vocabulary articles (ex. a, An, The)
+
+`const bandsList = document.querySelector('#bands')` `function stripe(bandName) { return bandName.replace(/^(a |the |an )/i, '').trim() }` `bandsList.innerHTML = bands.sort((a, b) => stripe(a) > stripe(b) ? 1 : -1).map((band => '<li>${band}</li>')).join('')`
+
+#18 - Adding Up Times with Reduce
+
+Go through a list of video times and output the total run time
+
+`const videos = document.querySelectorAll('li')` `const totalVideoTime = [...videos].reduce((total, video) => { const [mins, secs] = video.dataset.time.split(':').map(parseFloat); return total + (mins * 60) + secs; }, 0)` `console.log('totalVideoTime: ${Math.floor(totalVideoTime / 3600)}:${Math.floor((totalVideoTime % 3600) / 60)}:${Math.floor(totalVideoTime % 60)}')`
+
+#19 - Webcam Fun
+
+Connect to a client's web cam through the browser and display it in a canvas that lets you take a screenshot of live video
+
+`const video = document.querySelector('.player');` `const canvas = document.querySelector('.photo');` `const ctx = canvas.getContext('2d');` `const strip = document.querySelector('.strip');` `const snap = document.querySelector('.snap');` `function getVideo() { navigator.mediaDevices.getUserMedia({ video: true, audio: false}).then(localMediaStream => { video.src = window.URL.createObjectURL(localMediaStream); video.play(); }).catch(err => { console.error('No Work Video', err) }) };` `function paintToCanvas() { const width = video.videoWidth; const height = video.videoHeight; canvas.width = width; canvas.height = height; return setInterval(() => { ctx.drawImage(video, 0, 0, width, height); let pixels = ctx.getImageData(0, 0, width, height); ctx.globalAlpha = .6; pixels = greenScreen(pixels); ctx.putImageData(pixels, 0, 0); }, 16) }` `function takePhoto() { snap.curentTime = 0; snap.play(); const data = canvas.toDataURL('image/jpeg'); const link = document.createElement('a'); link.herf = data; link.setAttribute('download', 'handsome'); link.innerHTML = `<img src=${data} alt="Handsome Dude"/>`; strip.insertBefore(link, strip.firstChild); }; getVideo(); video.addEventListener('canplay', paintToCanvas);`
+
+#20 - Speech Detection
+
