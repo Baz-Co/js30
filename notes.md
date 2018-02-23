@@ -138,3 +138,46 @@ Connect to a client's web cam through the browser and display it in a canvas tha
 
 #20 - Speech Detection
 
+Use browser built in speech recognition
+
+`window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;` `const recognition = new SpeechRecognition();` `recognition.interimResults = true;` `recognition.lang = 'en-US';` `let p = document.createElement('p');` `const words = document.querySelector('.words');` `words.appendChild(p);` 
+`recognition.addEventListener('result', e => { const transcript = [...e.results].map(result => result[0]).map(result => result.transcript).join(''); p.textContent = transcript; if (transcript.includes('hey there')) { console.log('debounce this function ~~~~~~~~~') }; if(e.results[0].isFinal) { p = document.createElement('p'); words.appendChild(p); }});`  `recognition.addEventListener('end', recognition.start);` `recognition.start();`
+
+#21 - Geolocation
+
+Utilize geo location and speed coordinates
+
+`navigator.geolocation.watchPosition((data) => { console.log(data); speed.textContent = Math.round(data.coords.speed); arrow.style.transform = 'rotate(${data.coords.heading}deg)' }, err => { console.error(err); alert('You need to allow location permissions'); });`
+
+#22 - Follow Along Hyperlink
+
+Highlighter Pill follows a link when a user hovers over it
+
+`const triggers = document.querySelectorAll('a')` `const highlight = document.createElement('span')` `highlight.classList.add('highlight')` `document.body.append(highlight)` `function highlightLink() { const linkCoords = this.getBoundingClientRect(); const coords = { width: linkCoords.width, height: linkCoords.height, top: linkCoords.top + window.scrollY, left: linkCoords.left + window.scrollX }; highlight.style.width = '${coords.width}px'; highlight.style.height = '${coords.height}px'; highlight.style.transform = 'translate(${coords.left}px, ${coords.top}px)'; }` `triggers.forEach(a => a.addEventListener('mouseenter', highlightLink))`
+
+#23 - Speech Synthesis
+
+Use default browser text to sound
+
+`const msg = new SpeechSynthesisUtterance();` `let voices = [];` `const voicesDropdown = document.querySelector('[name="voice"]');` `const options = document.querySelectorAll('[type="range"], [name="text"]');` `const speakButton = document.querySelector('#speak');` `const stopButton = document.querySelector('#stop');` `msg.text = document.querySelector('[name="text"]').value` `function populateVoices() { voices = this.getVoices(); voicesDropdown.innerHTML = voices.filter(voice => voice.lang.includes('en')).map(voice => '<option value="${voice.name}">${voice.name} (${voice.lang})</option>').join('') }` `function setVoice() { msg.voice = voices.find(voice => voice.name === this.value); toggle() }` `function toggle(startOver = true) { speechSynthesis.cancel(); if(startOver) { speechSynthesis.speak(msg) } }` `function setOption() { msg[this.name] = this.value; toggle() }` `speechSynthesis.addEventListener('voiceschanged', populateVoices)` `voicesDropdown.addEventListener('change', setVoice)` `options.forEach(option => option.addEventListener('change', setOption))` `speakButton.addEventListener('click', toggle)` `stopButton.addEventListener('click', toggle.bind(null, false))` `stopButton.addEventListener('click', () => toggle(false))` 
+
+#24 - Sticky Nav
+
+Nav sticks to top of the screen when user scrolls past the heading
+
+`const nav = document.querySelector('#main'); function fixNav() { if(window.scrollY >= nav.offsetTop) { document.body.style.paddingTop = nav.offsetHeight + 'px'; document.body.classList.add('fixed-nav'); } else { document.body.style.paddingTop = 0; document.body.classList.remove('fixed-nav'); } }` `window.addEventListener('scroll', fixNav)`
+
+#25 - Event Capture, Propagation, Bubbling and Once
+
+Events Captured Outside-In and are Propagated Inside-Out
+
+`document.querySelector('button').addEventListener('click', () => console.log('clicked'), { capture: true, once: true })`
+
+#26 - Stripe Follow Along Nav
+
+Auto sizing hover divs
+
+`const triggers = document.querySelectorAll('.cool > li')` `const background = document.querySelector('.dropdownBackground')` `const nav = document.querySelector('nav')` `function handleEnter() { this.classList.add('trigger-enter'); setTimeout(() => this.classList.contains('trigger-enter') && this.classList.add('trigger-enter-active'), 150); background.classList.add('open'); const dropdown = this.querySelector('.dropdown'); const dropdownCoords = dropdown.getBoundingClientRect(); const navCoords = nav.getBoundingClientRect(); const coords = { height: dropdownCoords.height, width: dropdownCoords.width, top: dropdownCoords.top - navCoords.top, left: dropdownCoords.left }; background.style.setProperty('width', coords.width+'px'); background.style.setProperty('height', coords.height+'px'); background.style.setProperty('transform', 'translate(${coords.left}px, ${coords.top}px') }` `function handleLeave() { this.classList.remove('trigger-enter', 'trigger-enter-active'); background.classList.remove('open'); }` `triggers.forEach(trigger => { trigger.addEventListener('mouseenter', handleEnter); trigger.addEventListener('mouseleave', handleLeave); })`
+
+#27 - Click and Drag
+
