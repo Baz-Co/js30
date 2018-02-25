@@ -181,3 +181,25 @@ Auto sizing hover divs
 
 #27 - Click and Drag
 
+Calculate Horizontal Walk for Click and Scroll Events
+
+`const slider = document.querySelector('.items'); let isDown = false; let startX; let scrollLeft;` `slider.addEventListener('mousedown', (e) => { isDown = true; slider.classList.add('active') startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; })` `slider.addEventListener('mouseleave', () => { isDown = false; slider.classList.remove('active'); })` `slider.addEventListener('mouseup', () => { isDown = false; slider.classList.remove('active'); })` `slider.addEventListener('mousemove', (e) => { if(!isDown) return; e.preventDefault(); const x = e.pageX - slider.offsetLeft; const walk = (x - startX) * 2; slider.scrollLeft = scrollLeft - walk; })`
+
+#28 - Video Speed Controller UI
+
+Hover Bar that changes a video playback speed
+
+`speed.addEventListener('mousemove', function (e) { const y = e.pageY - this.offsetTop; const percent = y / this.offsetHeight; const min = 0.4; const max = 4; const height = Math.round(percent * 100) + '%'; const playbackRate = percent * (max - min) + min; bar.style.height = height; bar.textContent = playbackRate.toFixed(1) + 'x'; video.playbackRate = playbackRate; console.log({ y, percent, min, max, height, playbackRate }); })`
+
+#29 - Countdown Clock
+
+Create a Timer with End Time Display and Quick Set Buttons
+
+`let countdown; const timerDisplay = document.querySelector('.display__time-left'); const endTime = document.querySelector('.display__end-time'); const buttons = document.querySelectorAll('[data-time]');` `function timer(seconds) { clearInterval(countdown); const now = Date.now(); const then = now + seconds * 1000; displayTimeLeft(seconds); displayEndTime(then); countdown = setInterval(function () { const secondsLeft = Math.round((then - Date.now()) / 1000); if(secondsLeft <= 0) { clearInterval(countdown); return; }; displayTimeLeft(secondsLeft); }, 1000) }` `function displayTimeLeft(seconds) { const minutes = Math.floor(seconds / 60); const remainderSeconds = seconds % 60; const display = '${minutes}:${remainderSeconds<10 ? '0':''}${remainderSeconds}'; document.title = display; timerDisplay.textContent = display; }` `function displayEndTime(timestamp) { const end = new Date(timestamp); const hours = end.getHours(); const minutes = end.getMinutes(); endTime.textContent = 'Be Back At ${hours > 12 ? hours - 12 : hours}:${minutes<10?'0':''}${minutes}'; }` `function startTimer() { const seconds = parseInt(this.dataset.time); timer(seconds) }` `buttons.forEach(button => button.addEventListener('click', startTimer));document.customForm.addEventListener('submit', function(e) { e.preventDefault(); const mins = this.minutes.value; timer(mins * 60); this.reset(); })`
+
+#30 - Whack a Mole
+
+Make element appear and disappear from the screen while creating listener for element clicks
+
+`const holes = document.querySelectorAll('.hole');` `const scoreBoard = document.querySelector('.score');` `const moles = document.querySelectorAll('.mole');` `let lastHole` `let timeUp = false` `let score = 0`  `function randTime(min, max) { return Math.round(Math.random() * (max - min) + min) }` `function randHole(holes) { const idx = Math.floor(Math.random() * holes.length); const hole = holes[idx]; if(hole === lastHole) { return randHole(holes) }; lastHole = hole; return hole; }` `function peep() { const time = randTime(200, 3000); const hole = randHole(holes); hole.classList.add('up'); setTimeout(() => { hole.classList.remove('up'); if(!timeUp) { peep() }}, time); };` `function startGame() { scoreBoard.textContent = 0; timeUp = false; peep(); score = 0; setTimeout(() => { timeUp = true }, 2000); };` `function bonk(e) { if (!e.isTrusted) return; score++; this.classList.remove('up'); scoreBoard.textContent = score; }` `moles.forEach(mole => mole.addEventListener('click', bonk))`
+
